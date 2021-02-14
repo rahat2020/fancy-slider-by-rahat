@@ -13,7 +13,7 @@ let sliders = [];
 // to create your own api key
 const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 
-// show images 
+// show images ////////////////////////////
 const showImages = (images) => {
   imagesArea.style.display = 'block';
   gallery.innerHTML = '';
@@ -28,6 +28,17 @@ const showImages = (images) => {
 
 }
 
+// search button keyboard click show result/////////
+
+searchField = document.getElementById("search")
+.addEventListener("keypress", function(event) {
+    // event.preventDefault();
+    if (event.key == 'Enter'){
+      document.getElementById("search-btn").click();
+    }
+    
+});
+
 const getImages = (query) => {
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
@@ -36,17 +47,29 @@ const getImages = (query) => {
 }
 
 let slideIndex = 0;
+// const selectItem = (event, img) => {
+//   let element = event.target;
+//   element.classList.add('added');
+ 
+//   let item = sliders.indexOf(img);
+//   if (item === -1) {
+//     sliders.push(img);
+//   } else {
+//     alert('Hey, Already added !')
+//   }
+// }
 const selectItem = (event, img) => {
   let element = event.target;
-  element.classList.add('added');
- 
+  element.classList.toggle('added');
   let item = sliders.indexOf(img);
   if (item === -1) {
     sliders.push(img);
   } else {
-    alert('Hey, Already added !')
+    
+    sliders.pop(img);
   }
 }
+
 var timer
 const createSlider = () => {
   // check slider image length
@@ -65,9 +88,11 @@ const createSlider = () => {
 
   sliderContainer.appendChild(prevNext)
   document.querySelector('.main').style.display = 'block';
+
   // hide image aria
   imagesArea.style.display = 'none';
-  const duration = document.getElementById('duration').value || 1000;
+  const duration = (document.getElementById('duration').value <=0) ? 1000 : document.getElementById('duration').value;
+  // const duration = document.getElementById('duration').value || 1000;
   sliders.forEach(slide => {
     let item = document.createElement('div')
     item.className = "slider-item";
@@ -89,8 +114,8 @@ const changeItem = index => {
 }
 
 // change slide item
-const changeSlide = (index) => {
 
+const changeSlide = (index) => {
   const items = document.querySelectorAll('.slider-item');
   if (index < 0) {
     slideIndex = items.length - 1
